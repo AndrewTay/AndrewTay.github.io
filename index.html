@@ -224,11 +224,11 @@
         }
 
         .nav-brand-dot {
-            width: 7px; height: 7px;
+            width: 6px; height: 6px;
             border-radius: 50%;
             background: var(--accent);
-            box-shadow: 0 0 14px var(--accent-glow);
-            animation: pulse 2.4s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--accent-glow);
+            opacity: 0.9;
         }
 
         @keyframes pulse {
@@ -335,10 +335,11 @@
         }
 
         .hero-mesh::after {
-            bottom: -20%;
+            bottom: -25%;
             right: calc(var(--mx-inv, 50%) - 280px);
-            background: var(--gradient-peach);
+            background: radial-gradient(circle, rgba(97, 95, 255, 0.28), transparent 70%);
             animation: drift 28s ease-in-out infinite reverse;
+            opacity: 0.6;
         }
 
         .hero-mesh-cyan {
@@ -370,25 +371,21 @@
 
         .eyebrow {
             font-family: var(--font-mono);
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             text-transform: uppercase;
-            letter-spacing: 0.18em;
+            letter-spacing: 0.22em;
             color: var(--text-muted);
             display: inline-flex;
             align-items: center;
-            gap: 0.6rem;
-            margin-bottom: 2rem;
-            padding: 0.4rem 0.85rem;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: 100px;
+            gap: 0.75rem;
+            margin-bottom: 2.25rem;
         }
 
-        .eyebrow-dot {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: #22d3ee;
-            box-shadow: 0 0 10px #22d3ee;
+        .eyebrow::before {
+            content: '';
+            width: 22px;
+            height: 1px;
+            background: var(--text-faint);
         }
 
         .hero-title {
@@ -408,7 +405,7 @@
 
         .hero-subtitle {
             font-family: var(--font-display);
-            font-size: clamp(1.4rem, 3.2vw, 2.4rem);
+            font-size: clamp(1.4rem, 3vw, 2.1rem);
             line-height: 1.25;
             letter-spacing: -0.015em;
             color: var(--text);
@@ -416,27 +413,14 @@
             font-style: normal;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5em;
-            align-items: baseline;
+            gap: 0.4em;
         }
 
-        .pillar-word {
-            display: inline-flex;
-            align-items: baseline;
-            gap: 0.28em;
-        }
-
-        .pillar-word .tick {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            display: inline-block;
-            transform: translateY(-0.25em);
-            opacity: 0.9;
-        }
-
-        .pillar-word.p1 .tick { background: var(--pillar-identity); box-shadow: 0 0 12px var(--pillar-identity); }
-        .pillar-word.p2 .tick { background: var(--pillar-automation); box-shadow: 0 0 12px var(--pillar-automation); }
-        .pillar-word.p3 .tick { background: var(--pillar-ai); box-shadow: 0 0 12px var(--pillar-ai); }
+        .pillar-word { display: inline; }
+        .pillar-word .accent-period { font-style: normal; }
+        .pillar-word.p1 .accent-period { color: var(--pillar-identity); }
+        .pillar-word.p2 .accent-period { color: var(--pillar-automation); }
+        .pillar-word.p3 .accent-period { color: var(--pillar-ai); }
 
         .hero-text {
             font-size: clamp(1.05rem, 1.4vw, 1.2rem);
@@ -521,7 +505,7 @@
             align-items: flex-end;
             flex-wrap: wrap;
             gap: 1.5rem;
-            margin-bottom: 4rem;
+            margin-bottom: clamp(2.5rem, 5vw, 4rem);
             padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
         }
@@ -709,17 +693,16 @@
         .work-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 0;
+            gap: 1px;
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             overflow: hidden;
-            background: var(--bg-elevated);
+            background: var(--border);
         }
 
         .work-item {
             padding: 2rem;
-            border-right: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
+            background: var(--bg-elevated);
             transition: background 0.3s var(--ease);
             position: relative;
         }
@@ -808,6 +791,8 @@
             letter-spacing: -0.03em;
             margin-bottom: 0.5rem;
             font-style: italic;
+            font-feature-settings: "lnum" 1, "tnum" 1;
+            font-variant-numeric: lining-nums tabular-nums;
         }
 
         .stat-value .unit {
@@ -934,7 +919,7 @@
         .about {
             display: grid;
             grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
-            gap: 4rem;
+            gap: clamp(2.5rem, 5vw, 4rem);
             align-items: start;
         }
 
@@ -960,13 +945,10 @@
             top: 6rem;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-            border-left: 1px solid var(--border);
-            padding-left: 2rem;
         }
 
         .about-fact {
-            padding: 0.9rem 0;
+            padding: 0.95rem 0.25rem;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
@@ -975,7 +957,11 @@
             font-size: 0.9rem;
         }
 
-        .about-fact:last-child { border-bottom: none; }
+        .about-fact:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .about-fact:last-child { border-bottom: 1px solid var(--border); }
 
         .about-fact-label {
             font-family: var(--font-mono);
@@ -1126,10 +1112,7 @@
 
             .about-facts {
                 position: static;
-                border-left: none;
-                border-top: 1px solid var(--border);
-                padding-left: 0;
-                padding-top: 1rem;
+                padding-top: 0.5rem;
             }
 
             .nav-links .nav-link:not(.nav-link-keep) {
@@ -1142,7 +1125,7 @@
             }
 
             .work-item {
-                border-right: none;
+                padding: 1.75rem;
             }
         }
 
@@ -1222,14 +1205,13 @@
             <div class="container">
                 <div class="hero-content">
                     <span class="eyebrow reveal">
-                        <span class="eyebrow-dot" aria-hidden="true"></span>
                         Andrew Tay · Based in Singapore
                     </span>
                     <h1 class="hero-title reveal">Solutions architect<span class="period">.</span></h1>
                     <p class="hero-subtitle reveal">
-                        <span class="pillar-word p1"><span class="tick" aria-hidden="true"></span>Identity.</span>
-                        <span class="pillar-word p2"><span class="tick" aria-hidden="true"></span>Automation.</span>
-                        <span class="pillar-word p3"><span class="tick" aria-hidden="true"></span>Applied AI.</span>
+                        <span class="pillar-word p1">Identity<span class="accent-period">.</span></span>
+                        <span class="pillar-word p2">Automation<span class="accent-period">.</span></span>
+                        <span class="pillar-word p3">Applied AI<span class="accent-period">.</span></span>
                     </p>
                     <p class="hero-text reveal">
                         I design the systems that let teams <strong>actually ship</strong>: identity verification (KYC, KYB, fraud), process automation, and AI agent fleets built to amplify human judgment across the decisions that matter. Seven years across pre-sales, post-sales, and implementation, <strong>spanning enterprise automation and global identity</strong>. Comfortable across jurisdictions, stakeholders, and, when the deal calls for it, languages.
