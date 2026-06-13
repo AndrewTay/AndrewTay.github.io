@@ -4,25 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Andrew Tay — Systems &amp; Solutions Engineer</title>
-<meta name="description" content="Andrew Tay (Tay Wei Quan) — Solutions Engineer in Singapore. Cloud infrastructure, workflow automation, and systems design. Currently architecting KYC/KYB automation at Trulioo.">
+<meta name="description" content="Andrew Tay (Tay Wei Quan) — Systems & Solutions Engineer in Singapore. Cloud infrastructure, workflow automation, and systems design. Currently building KYC/KYB automation at Trulioo.">
+<meta name="author" content="Andrew Tay (Tay Wei Quan)">
 <meta property="og:title" content="Andrew Tay — Systems & Solutions Engineer">
-<meta property="og:description" content="Cloud infrastructure, workflow automation, and systems design. A living network of work, projects, and ideas.">
+<meta property="og:description" content="Cloud infrastructure, workflow automation, and systems design — and the projects in between.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://andtay.com">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Andrew Tay — Systems & Solutions Engineer">
+<meta name="twitter:description" content="Cloud infrastructure, workflow automation, and systems design — and the projects in between.">
 <meta name="theme-color" content="#050505">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050505'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ffffff'/%3E%3Ccircle cx='6' cy='6' r='1.5' fill='%23777'/%3E%3Ccircle cx='26' cy='6' r='1.5' fill='%23777'/%3E%3Ccircle cx='6' cy='26' r='1.5' fill='%23777'/%3E%3Ccircle cx='26' cy='26' r='1.5' fill='%23777'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050505'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ffffff'/%3E%3Ccircle cx='6' cy='6' r='1.5' fill='%23777'/%3E%3Ccircle cx='26' cy='6' r='1.5' fill='%23777'/%3E%3Ccircle cx='6' cy='26' r='1.5' fill='%23777'/%3E%3Ccircle cx='26' cy='26' r='1.5' fill='%23777'/%3E%3Cpath d='M16 16 L6 6 M16 16 L26 6 M16 16 L6 26 M16 16 L26 26' stroke='%23444' stroke-width='0.75'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #050505;
+    --bg-raise: #0c0c0d;
     --fg: #f4f4f4;
-    --mid: #9a9a9a;
-    --dim: #5c5c5c;
+    --mid: #a6a6a6;
+    --dim: #6a6a6a;
     --faint: #2c2c2c;
     --hairline: rgba(255, 255, 255, 0.10);
     --hairline-soft: rgba(255, 255, 255, 0.06);
+    /* monochrome "accent" — emphasis via light grey/white, no colour */
+    --accent: #c9c9c9;
+    --accent-strong: #ffffff;
+    --accent-glow: rgba(255, 255, 255, 0.18);
     --font-display: "Space Grotesk", system-ui, sans-serif;
     --font-mono: "IBM Plex Mono", ui-monospace, monospace;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -44,14 +53,28 @@
     text-rendering: optimizeLegibility;
   }
 
-  ::selection { background: var(--fg); color: var(--bg); }
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  a:focus-visible,
+  button:focus-visible,
+  .email-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
 
   /* ---------- canvas field ---------- */
-  #field {
+  #field { position: fixed; inset: 0; z-index: 0; display: block; }
+
+  /* legibility veil */
+  .veil {
     position: fixed;
     inset: 0;
-    z-index: 0;
-    display: block;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 120% 90% at 50% 38%, transparent 0%, rgba(5,5,5,0.55) 78%, rgba(5,5,5,0.82) 100%),
+      linear-gradient(180deg, rgba(5,5,5,0.30) 0%, transparent 22%, transparent 80%, rgba(5,5,5,0.45) 100%);
   }
 
   /* ---------- HUD chrome ---------- */
@@ -71,29 +94,15 @@
   .hud--bl { bottom: 18px; left: 20px; }
   .hud--br { bottom: 18px; right: 20px; text-align: right; }
 
-  .hud .pulse-dot {
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--fg);
-    margin-right: 7px;
-    vertical-align: 1px;
-    animation: blink 2.4s ease-in-out infinite;
-  }
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.15; }
-  }
-
   /* scroll progress hairline */
   #progress {
     position: fixed;
     top: 0; left: 0;
-    height: 1px;
+    height: 2px;
     width: 0%;
-    background: var(--fg);
+    background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+    box-shadow: 0 0 10px var(--accent-glow);
     z-index: 50;
-    opacity: 0.7;
   }
 
   /* ---------- navigation ---------- */
@@ -127,7 +136,8 @@
     transition: width 0.4s var(--ease-out), background 0.4s var(--ease-out);
   }
   nav a:hover, nav a.active { color: var(--fg); }
-  nav a:hover .tick, nav a.active .tick { width: 28px; background: var(--fg); }
+  nav a:hover .tick { width: 26px; background: var(--fg); }
+  nav a.active .tick { width: 30px; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
   nav a span.label {
     opacity: 0;
     transform: translateX(6px);
@@ -140,12 +150,11 @@
 
   section, footer.site-footer {
     position: relative;
-    padding: clamp(90px, 14vh, 160px) var(--gutter);
+    padding: clamp(86px, 13vh, 150px) var(--gutter);
     max-width: 1180px;
     margin: 0 auto;
   }
 
-  /* section header: numbered spec style */
   .sec-head {
     display: flex;
     align-items: baseline;
@@ -158,19 +167,14 @@
     font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.2em;
-    color: var(--dim);
+    color: var(--accent);
   }
   .sec-head h2 {
     font-size: clamp(22px, 3.4vw, 34px);
     font-weight: 500;
     letter-spacing: -0.01em;
   }
-  .sec-head .line {
-    flex: 1;
-    height: 1px;
-    background: var(--hairline-soft);
-    align-self: center;
-  }
+  .sec-head .line { flex: 1; height: 1px; background: var(--hairline-soft); align-self: center; }
   .sec-head .meta {
     font-family: var(--font-mono);
     font-size: 10px;
@@ -183,7 +187,7 @@
   /* ---------- reveal animations ---------- */
   .reveal {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(26px);
     transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
     transition-delay: var(--d, 0s);
   }
@@ -197,7 +201,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 var(--gutter);
+    padding: clamp(120px, 18vh, 180px) var(--gutter) clamp(110px, 16vh, 150px);
   }
   .hero-inner { max-width: 1180px; margin: 0 auto; width: 100%; }
 
@@ -212,87 +216,113 @@
     align-items: center;
     gap: 12px;
   }
-  .hero-kicker::before {
-    content: "";
-    width: 36px; height: 1px;
-    background: var(--mid);
-    display: inline-block;
-  }
+  .hero-kicker::before { content: ""; width: 36px; height: 1px; background: var(--accent); display: inline-block; }
 
   h1 {
-    font-size: clamp(52px, 11vw, 148px);
+    font-size: clamp(50px, 10.5vw, 144px);
     font-weight: 600;
-    line-height: 0.98;
+    line-height: 0.95;
     letter-spacing: -0.03em;
     margin-bottom: 30px;
   }
-  h1 .ghost { color: transparent; -webkit-text-stroke: 1px var(--dim); }
+  h1 .ghost { color: rgba(244, 244, 244, 0.06); -webkit-text-stroke: 1px var(--mid); }
 
   .hero-sub {
-    max-width: 560px;
+    max-width: 600px;
     color: var(--mid);
-    font-size: clamp(15px, 1.6vw, 18px);
+    font-size: clamp(15px, 1.65vw, 19px);
     font-weight: 300;
   }
   .hero-sub strong { color: var(--fg); font-weight: 500; }
 
-  .hero-foot {
-    margin-top: clamp(40px, 8vh, 80px);
+  .hero-now {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--mid);
+    border: 1px solid var(--hairline);
+    border-radius: 100px;
+    padding: 7px 16px;
+    background: rgba(255,255,255,0.015);
+  }
+  .hero-now strong { color: var(--fg); font-weight: 500; }
+
+  .hero-cta {
+    margin-top: clamp(32px, 5vh, 46px);
     display: flex;
-    gap: clamp(24px, 4vw, 64px);
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 26px;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.3s var(--ease-out), background 0.4s, color 0.4s, border-color 0.4s, box-shadow 0.4s;
+    will-change: transform;
+  }
+  .btn-primary { background: var(--fg); color: var(--bg); border: 1px solid var(--fg); }
+  .btn-primary:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+    box-shadow: 0 0 28px var(--accent-glow);
+    transform: translateY(-2px);
+  }
+  .btn-ghost { background: transparent; color: var(--mid); border: 1px solid var(--hairline); }
+  .btn-ghost:hover { color: var(--fg); border-color: var(--mid); transform: translateY(-2px); }
+
+  .hero-cred {
+    margin-top: clamp(40px, 7vh, 64px);
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 34px);
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .hero-cred .lbl { color: var(--dim); opacity: 0.7; }
+  .hero-cred .item { color: var(--mid); transition: color 0.3s; }
+  .hero-cred .item:hover { color: var(--fg); }
+  .hero-cred .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--faint); }
+
+  .hero-foot {
+    margin-top: clamp(40px, 7vh, 70px);
+    display: flex;
+    gap: clamp(28px, 5vw, 70px);
     flex-wrap: wrap;
   }
   .hero-stat { font-family: var(--font-mono); }
   .hero-stat .v {
-    font-size: clamp(18px, 2.2vw, 24px);
+    font-size: clamp(20px, 2.4vw, 26px);
     color: var(--fg);
     font-weight: 400;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
   }
   .hero-stat .k {
     font-size: 10px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--dim);
-    margin-top: 4px;
+    margin-top: 6px;
   }
 
-  .scroll-cue {
-    position: absolute;
-    bottom: 46px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--dim);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-  .scroll-cue .wire {
-    width: 1px;
-    height: 44px;
-    background: linear-gradient(var(--dim), transparent);
-    position: relative;
-    overflow: hidden;
-  }
-  .scroll-cue .wire::after {
-    content: "";
-    position: absolute;
-    top: -8px; left: 0;
-    width: 1px; height: 8px;
-    background: var(--fg);
-    animation: drop 2.2s var(--ease-out) infinite;
-  }
-  @keyframes drop {
-    0% { top: -8px; opacity: 1; }
-    70% { top: 44px; opacity: 1; }
-    100% { top: 44px; opacity: 0; }
-  }
-
-  /* ---------- profile ---------- */
+  /* ---------- profile / lens ---------- */
   .profile-grid {
     display: grid;
     grid-template-columns: 1.4fr 1fr;
@@ -305,10 +335,7 @@
     line-height: 1.45;
     letter-spacing: -0.01em;
   }
-  .profile-grid .lede em {
-    font-style: normal;
-    color: var(--mid);
-  }
+  .profile-grid .lede em { font-style: normal; color: var(--fg); border-bottom: 1px solid var(--accent); padding-bottom: 1px; }
   .profile-aside {
     font-family: var(--font-mono);
     font-size: 12px;
@@ -322,12 +349,12 @@
     font-size: 9px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--dim);
+    color: var(--accent);
     margin-bottom: 6px;
   }
   .profile-aside .v { color: var(--fg); line-height: 1.7; }
 
-  /* ---------- experience timeline ---------- */
+  /* ---------- experience timeline (Track Record) ---------- */
   .timeline { position: relative; }
   .timeline::before {
     content: "";
@@ -338,10 +365,7 @@
     width: 1px;
     background: var(--hairline);
   }
-  .node {
-    position: relative;
-    padding: 0 0 clamp(48px, 8vh, 84px) clamp(36px, 5vw, 64px);
-  }
+  .node { position: relative; padding: 0 0 clamp(44px, 7vh, 76px) clamp(34px, 5vw, 60px); }
   .node:last-child { padding-bottom: 0; }
   .node::before {
     content: "";
@@ -354,58 +378,35 @@
     background: var(--bg);
     transition: background 0.5s var(--ease-out), border-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
   }
-  .node:hover::before {
-    background: var(--fg);
-    border-color: var(--fg);
-    box-shadow: 0 0 18px rgba(255,255,255,0.45);
+  .node:hover::before,
+  .node.current::before {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 18px var(--accent-glow);
   }
-  .node-head {
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 6px;
-  }
-  .node-head h3 {
-    font-size: clamp(22px, 3vw, 30px);
-    font-weight: 500;
-    letter-spacing: -0.01em;
-  }
+  .node-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+  .node-head h3 { font-size: clamp(21px, 2.8vw, 28px); font-weight: 500; letter-spacing: -0.01em; }
   .node-head .when {
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--dim);
+    border: 1px solid var(--hairline-soft);
+    padding: 3px 9px;
+    border-radius: 100px;
   }
+  .node-head .when.now { color: var(--fg); border-color: rgba(255,255,255,0.3); }
   .node .role {
     font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.06em;
     color: var(--mid);
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
-  .node ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 760px;
-  }
-  .node ul li {
-    color: var(--mid);
-    font-size: 15px;
-    padding-left: 22px;
-    position: relative;
-  }
-  .node ul li::before {
-    content: "▸";
-    position: absolute;
-    left: 0;
-    color: var(--dim);
-    font-size: 10px;
-    top: 5px;
-  }
+  .node ul { list-style: none; display: flex; flex-direction: column; gap: 10px; max-width: 760px; }
+  .node ul li { color: var(--mid); font-size: 15px; padding-left: 22px; position: relative; line-height: 1.55; }
+  .node ul li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); font-size: 10px; top: 5px; }
   .node ul li strong { color: var(--fg); font-weight: 500; }
   .badges { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
   .badge {
@@ -417,11 +418,11 @@
     border: 1px solid var(--hairline);
     padding: 5px 10px;
     border-radius: 2px;
-    transition: color 0.4s, border-color 0.4s;
+    transition: color 0.4s, border-color 0.4s, background 0.4s;
   }
-  .badge:hover { color: var(--fg); border-color: var(--mid); }
+  .badge:hover { color: var(--fg); border-color: var(--accent); background: rgba(255,255,255,0.05); }
 
-  /* ---------- projects ---------- */
+  /* ---------- projects / threads ---------- */
   .proj-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -435,11 +436,11 @@
     position: relative;
     overflow: hidden;
     transition: background 0.5s var(--ease-out);
-    min-height: 230px;
+    min-height: 224px;
     display: flex;
     flex-direction: column;
   }
-  .proj:hover { background: #0c0c0c; }
+  .proj:hover { background: var(--bg-raise); }
   .proj .id {
     font-family: var(--font-mono);
     font-size: 9px;
@@ -450,13 +451,9 @@
     display: flex;
     justify-content: space-between;
   }
-  .proj h3 {
-    font-size: 21px;
-    font-weight: 500;
-    margin-bottom: 10px;
-    letter-spacing: -0.01em;
-  }
-  .proj p { color: var(--mid); font-size: 14px; flex: 1; }
+  .proj .id .verb { color: var(--accent); }
+  .proj h3 { font-size: 21px; font-weight: 500; margin-bottom: 10px; letter-spacing: -0.01em; }
+  .proj p { color: var(--mid); font-size: 14px; flex: 1; line-height: 1.55; }
   .proj .tags {
     margin-top: 20px;
     font-family: var(--font-mono);
@@ -470,75 +467,13 @@
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 1px;
-    background: var(--fg);
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.6s var(--ease-out);
   }
   .proj:hover::after { transform: scaleX(1); }
-
-  /* ---------- systems / skills ---------- */
-  .sys-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: clamp(28px, 4vw, 56px);
-  }
-  .sys-col .k {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--dim);
-    border-bottom: 1px solid var(--hairline);
-    padding-bottom: 10px;
-    margin-bottom: 16px;
-  }
-  .sys-col ul { list-style: none; }
-  .sys-col li {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--mid);
-    padding: 7px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-    transition: color 0.3s;
-  }
-  .sys-col li:hover { color: var(--fg); }
-  .sys-col li .yrs {
-    font-size: 9px;
-    letter-spacing: 0.14em;
-    color: var(--dim);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .sys-col li .bar {
-    flex: 1;
-    border-bottom: 1px dotted var(--faint);
-    transform: translateY(-3px);
-  }
-
-  /* ---------- beyond ---------- */
-  .beyond-list { display: flex; flex-direction: column; }
-  .beyond {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: clamp(16px, 4vw, 48px);
-    padding: 26px 0;
-    border-bottom: 1px solid var(--hairline-soft);
-    align-items: baseline;
-  }
-  .beyond:first-child { border-top: 1px solid var(--hairline-soft); }
-  .beyond .tag {
-    font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--dim);
-  }
-  .beyond p { color: var(--mid); font-size: 15px; max-width: 700px; }
-  .beyond p strong { color: var(--fg); font-weight: 500; }
 
   /* ---------- creed ---------- */
   .creed { display: flex; flex-direction: column; }
@@ -558,7 +493,7 @@
     color: var(--dim);
     transition: color 0.4s var(--ease-out);
   }
-  .creed-item:hover .n { color: var(--fg); }
+  .creed-item:hover .n { color: var(--accent); }
   .creed-item p {
     font-size: clamp(18px, 2.5vw, 27px);
     font-weight: 300;
@@ -569,8 +504,26 @@
   }
   .creed-item p span { color: var(--dim); }
 
-  /* ---------- threads (repurposed project grid) ---------- */
-  .thread h3 { display: flex; align-items: baseline; gap: 10px; }
+  /* ---------- beyond ---------- */
+  .beyond-list { display: flex; flex-direction: column; }
+  .beyond {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: clamp(16px, 4vw, 48px);
+    padding: 26px 0;
+    border-bottom: 1px solid var(--hairline-soft);
+    align-items: baseline;
+  }
+  .beyond:first-child { border-top: 1px solid var(--hairline-soft); }
+  .beyond .tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .beyond p { color: var(--mid); font-size: 15px; max-width: 700px; line-height: 1.55; }
+  .beyond p strong { color: var(--fg); font-weight: 500; }
 
   /* ---------- contact / footer ---------- */
   .site-footer { text-align: left; padding-bottom: 120px; }
@@ -584,21 +537,22 @@
   }
   .email-link {
     display: inline-block;
-    font-size: clamp(30px, 6.2vw, 76px);
+    font-size: clamp(26px, 5.4vw, 68px);
     font-weight: 500;
     letter-spacing: -0.02em;
     color: var(--fg);
     text-decoration: none;
     position: relative;
     line-height: 1.15;
-    word-break: break-all;
+    overflow-wrap: anywhere;
   }
   .email-link::after {
     content: "";
     position: absolute;
     bottom: -6px; left: 0;
     width: 100%; height: 1px;
-    background: var(--fg);
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.7s var(--ease-out);
@@ -608,7 +562,7 @@
   .footer-links {
     margin-top: 56px;
     display: flex;
-    gap: 28px;
+    gap: 18px;
     flex-wrap: wrap;
     align-items: center;
   }
@@ -622,12 +576,13 @@
     border: 1px solid var(--hairline);
     padding: 12px 22px;
     border-radius: 2px;
-    transition: color 0.4s, border-color 0.4s, background 0.4s;
+    transition: color 0.4s, border-color 0.4s, background 0.4s, transform 0.3s var(--ease-out);
   }
   .footer-links a:hover {
     color: var(--bg);
     background: var(--fg);
     border-color: var(--fg);
+    transform: translateY(-2px);
   }
   .colophon {
     margin-top: 80px;
@@ -650,13 +605,19 @@
     .profile-grid { grid-template-columns: 1fr; }
     .hud--tr, .hud--br { display: none; }
     .beyond { grid-template-columns: 1fr; gap: 6px; }
+    #hero { padding-top: clamp(96px, 14vh, 140px); }
+  }
+  @media (max-width: 540px) {
+    .hud--bl { display: none; }
+    .hero-cta { gap: 12px; }
+    .btn { flex: 1 1 auto; justify-content: center; }
   }
 
   /* ---------- reduced motion ---------- */
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .reveal { opacity: 1; transform: none; transition: none; }
-    .scroll-cue .wire::after, .hud .pulse-dot { animation: none; }
+    .btn:hover, .footer-links a:hover { transform: none; }
     * { transition-duration: 0.01ms !important; }
   }
 </style>
@@ -664,21 +625,22 @@
 <body>
 
 <canvas id="field" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
 <div id="progress" aria-hidden="true"></div>
 
 <!-- HUD chrome -->
-<div class="hud hud--tl"><span class="pulse-dot"></span>System online</div>
 <div class="hud hud--tr" id="hud-clock">--:--:-- SGT</div>
 <div class="hud hud--bl">1.3521° N / 103.8198° E</div>
 <div class="hud hud--br" id="hud-pos">NODE 000 / 000</div>
 
 <!-- side navigation -->
 <nav aria-label="Section navigation">
-  <a href="#hero" data-spy="hero"><span class="label">Init</span><span class="tick"></span></a>
-  <a href="#lens" data-spy="lens"><span class="label">Lens</span><span class="tick"></span></a>
-  <a href="#creed" data-spy="creed"><span class="label">Creed</span><span class="tick"></span></a>
-  <a href="#threads" data-spy="threads"><span class="label">Threads</span><span class="tick"></span></a>
-  <a href="#motion" data-spy="motion"><span class="label">Motion</span><span class="tick"></span></a>
+  <a href="#hero" data-spy="hero"><span class="label">Top</span><span class="tick"></span></a>
+  <a href="#lens" data-spy="lens"><span class="label">About</span><span class="tick"></span></a>
+  <a href="#work" data-spy="work"><span class="label">Work</span><span class="tick"></span></a>
+  <a href="#creed" data-spy="creed"><span class="label">Approach</span><span class="tick"></span></a>
+  <a href="#threads" data-spy="threads"><span class="label">Hats</span><span class="tick"></span></a>
+  <a href="#motion" data-spy="motion"><span class="label">Life</span><span class="tick"></span></a>
   <a href="#contact" data-spy="contact"><span class="label">Contact</span><span class="tick"></span></a>
 </nav>
 
@@ -687,23 +649,39 @@
   <!-- ================ HERO ================ -->
   <section id="hero">
     <div class="hero-inner">
-      <p class="hero-kicker reveal">Techno-Optimist — Singapore</p>
+      <p class="hero-kicker reveal">Systems &amp; Solutions Engineer — Singapore</p>
+      <div class="hero-now reveal" style="--d:.05s">
+        Currently — building <strong>KYC/KYB automation</strong> at Trulioo
+      </div>
       <h1 class="reveal" style="--d:.1s">
         <span id="scramble-1">Andrew</span><br>
         <span class="ghost" id="scramble-2">Tay</span>
       </h1>
       <p class="hero-sub reveal" style="--d:.25s">
-        I think in <strong>systems</strong>. People, markets, code, teams —
-        different surfaces, same wiring. My whole thing is learning fast,
-        finding what connects, and making the complicated feel <strong>obvious</strong>.
+        I like figuring out how things <strong>connect</strong> — people, markets,
+        code, teams. I pick things up fast, and I'm at my best taking a messy,
+        complicated problem and making it feel <strong>simple</strong>.
       </p>
-      <div class="hero-foot reveal" style="--d:.4s">
-        <div class="hero-stat"><div class="v" data-count="5">0</div><div class="k">Hats — engineer to founder</div></div>
-        <div class="hero-stat"><div class="v" data-count="3">0</div><div class="k">Languages I think in</div></div>
-        <div class="hero-stat"><div class="v" data-count="1">0</div><div class="k">Throughline: it all connects</div></div>
+
+      <div class="hero-cta reveal" style="--d:.35s">
+        <a class="btn btn-primary" href="mailto:andrewtaywq3@gmail.com">Say hello →</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/andrew-tay/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      </div>
+
+      <div class="hero-cred reveal" style="--d:.45s">
+        <span class="lbl">Built at</span>
+        <span class="item">Trulioo</span><span class="dot"></span>
+        <span class="item">GamerDraft</span><span class="dot"></span>
+        <span class="item">WheelPower</span><span class="dot"></span>
+        <span class="item">SUTD</span>
+      </div>
+
+      <div class="hero-foot reveal" style="--d:.55s">
+        <div class="hero-stat"><div class="v"><span data-count="3">0</span></div><div class="k">Cloud platforms</div></div>
+        <div class="hero-stat"><div class="v"><span data-count="4">0</span></div><div class="k">Certifications</div></div>
+        <div class="hero-stat"><div class="v"><span data-count="3">0</span></div><div class="k">Languages I think in</div></div>
       </div>
     </div>
-    <div class="scroll-cue"><span>Scroll</span><span class="wire"></span></div>
   </section>
 
   <!-- ================ LENS ================ -->
@@ -712,15 +690,15 @@
       <span class="num">01</span>
       <h2>The Way I See It</h2>
       <span class="line"></span>
-      <span class="meta">Worldview</span>
+      <span class="meta">How I think</span>
     </div>
     <div class="profile-grid">
       <p class="lede reveal">
-        Show me a company, a market, a sport, a person and I start looking for
-        the edges and the arrows. The feedback loops. The one node that quietly
-        moves everything else. <em>Nothing interesting is ever just one thing;
-        it's a system wearing a disguise,</em> and once you see the wiring, you
-        can't unsee it.
+        Give me a company, a market, a sport, even a person, and I'll start
+        mapping how the pieces fit — what's connected to what, and which small
+        thing is quietly moving everything else. <em>Most things are more
+        connected than they look,</em> and once you spot the pattern it's hard to
+        unsee. I can't really turn it off.
       </p>
       <div class="profile-aside reveal" style="--d:.15s">
         <div class="row">
@@ -743,38 +721,124 @@
     </div>
   </section>
 
+  <!-- ================ WORK / TRACK RECORD ================ -->
+  <section id="work">
+    <div class="sec-head reveal">
+      <span class="num">02</span>
+      <h2>Where I've Worked</h2>
+      <span class="line"></span>
+      <span class="meta">A quick tour</span>
+    </div>
+    <div class="timeline">
+      <article class="node current reveal">
+        <div class="node-head">
+          <h3>Trulioo</h3>
+          <span class="when now">Now</span>
+        </div>
+        <div class="role">Solutions Engineer · Identity &amp; Compliance Infrastructure</div>
+        <ul>
+          <li>Building <strong>KYC/KYB automation</strong> — turning manual identity and business-verification checks into workflows that run themselves.</li>
+          <li>Sitting between <strong>engineering and customers</strong> — working out how the product fits into someone's stack, then showing them it actually works.</li>
+          <li>Taking something genuinely complicated and explaining it so a room <strong>gets it in five minutes</strong>.</li>
+        </ul>
+        <div class="badges">
+          <span class="badge">KYC</span><span class="badge">KYB</span><span class="badge">Automation</span><span class="badge">Pre-Sales</span><span class="badge">Cloud</span>
+        </div>
+      </article>
+
+      <article class="node reveal">
+        <div class="node-head">
+          <h3>GamerDraft</h3>
+          <span class="when">Co-Founder</span>
+        </div>
+        <div class="role">Founder · Esports Platform · 0 → 1</div>
+        <ul>
+          <li>Co-founded an <strong>esports startup</strong> and built the product end to end — my first real taste of shipping something to actual users.</li>
+          <li>Learned a ton about building with no time and no budget: <strong>scope it, ship it, listen, repeat</strong>.</li>
+        </ul>
+        <div class="badges">
+          <span class="badge">Founder</span><span class="badge">Product</span><span class="badge">Esports</span><span class="badge">0→1</span>
+        </div>
+      </article>
+
+      <article class="node reveal">
+        <div class="node-head">
+          <h3>WheelPower &amp; Jason Chee</h3>
+          <span class="when">Builder, for others</span>
+        </div>
+        <div class="role">Impact · Accessibility · Human-Centered Product</div>
+        <ul>
+          <li>Ran <strong>WheelPower</strong> and built products alongside Paralympian <strong>Jason Chee</strong>.</li>
+          <li>Some of the work I'm proudest of — <strong>building things that genuinely help</strong> people who don't usually get built for.</li>
+        </ul>
+        <div class="badges">
+          <span class="badge">Impact</span><span class="badge">Accessibility</span><span class="badge">Human-Centered</span>
+        </div>
+      </article>
+
+      <article class="node reveal">
+        <div class="node-head">
+          <h3>Operations &amp; Finance</h3>
+          <span class="when">Operator</span>
+        </div>
+        <div class="role">Operations · Coordination · Keeping things on track</div>
+        <ul>
+          <li>Coordinated operations for <strong>hundreds of people</strong> and ran a company's finances end to end.</li>
+          <li>Usually the person <strong>keeping things organized</strong> when everything's a little on fire.</li>
+        </ul>
+        <div class="badges">
+          <span class="badge">Ops</span><span class="badge">Org Design</span><span class="badge">Finance</span><span class="badge">Execution</span>
+        </div>
+      </article>
+
+      <article class="node reveal">
+        <div class="node-head">
+          <h3>SUTD</h3>
+          <span class="when">Foundation</span>
+        </div>
+        <div class="role">B.Eng — Engineering Systems &amp; Design</div>
+        <ul>
+          <li>A degree, quite literally, in <strong>how systems connect</strong> — pretty much where the way I think got started.</li>
+        </ul>
+        <div class="badges">
+          <span class="badge">Systems</span><span class="badge">Design</span><span class="badge">Engineering</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
   <!-- ================ CREED ================ -->
   <section id="creed">
     <div class="sec-head reveal">
-      <span class="num">02</span>
-      <h2>What I Believe</h2>
+      <span class="num">03</span>
+      <h2>A Few Things I Go By</h2>
       <span class="line"></span>
-      <span class="meta">Operating principles</span>
+      <span class="meta">The short version</span>
     </div>
     <div class="creed">
       <div class="creed-item reveal">
         <span class="n">i.</span>
-        <p>Everything is a system. <span>Learn to read one and you can read almost any of them.</span></p>
+        <p>Most things are systems. <span>Learn to read one and the rest get a lot easier.</span></p>
       </div>
       <div class="creed-item reveal">
         <span class="n">ii.</span>
-        <p>Complexity isn't the enemy — confusion is. <span>The fun is in making the tangled thing legible.</span></p>
+        <p>Complexity is fine — confusion isn't. <span>I really enjoy making tangled things make sense.</span></p>
       </div>
       <div class="creed-item reveal">
         <span class="n">iii.</span>
-        <p>The fastest way to understand anything <span>is to find what it's connected to.</span></p>
+        <p>To understand something, <span>start with what it's connected to.</span></p>
       </div>
       <div class="creed-item reveal">
         <span class="n">iv.</span>
-        <p>Range beats depth <span>when the world keeps changing the question.</span></p>
+        <p>I'd rather learn a lot of things <span>than get too precious about just one.</span></p>
       </div>
       <div class="creed-item reveal">
         <span class="n">v.</span>
-        <p>Stay a student. <span>The moment I think I've got it figured out, I've stopped learning.</span></p>
+        <p>Stay curious. <span>The day I think I've got it all figured out is the day I've stopped learning.</span></p>
       </div>
       <div class="creed-item reveal">
         <span class="n">vi.</span>
-        <p>Build the thing. <span>Opinions are cheap; working artifacts aren't.</span></p>
+        <p>Just build the thing. <span>A rough version that works beats a perfect one that doesn't exist.</span></p>
       </div>
     </div>
   </section>
@@ -782,55 +846,55 @@
   <!-- ================ THREADS ================ -->
   <section id="threads">
     <div class="sec-head reveal">
-      <span class="num">03</span>
-      <h2>The Threads</h2>
+      <span class="num">04</span>
+      <h2>Many Hats</h2>
       <span class="line"></span>
-      <span class="meta">Same engine, many forms</span>
+      <span class="meta">Same me, different modes</span>
     </div>
     <div class="proj-grid reveal">
       <article class="proj thread">
-        <div class="id"><span>01</span><span>Make</span></div>
+        <div class="id"><span>01</span><span class="verb">Make</span></div>
         <h3>The Builder</h3>
-        <p>I like making things that didn't exist yesterday — co-founded an esports startup, won a company hackathon, shipped AI agents and demo platforms because they simply needed to exist.</p>
+        <p>I make things that didn't exist yesterday — and I'd rather ship a rough working version than argue about a perfect imaginary one.</p>
         <div class="tags">Founder · Hacker · Shipper</div>
       </article>
       <article class="proj thread">
-        <div class="id"><span>02</span><span>Translate</span></div>
+        <div class="id"><span>02</span><span class="verb">Translate</span></div>
         <h3>The Translator</h3>
-        <p>I live in the gap between engineering and the people who need it — turning "what does this even do" into something a room of strangers gets in five minutes.</p>
+        <p>I'm good at sitting between the engineers and everyone else — turning "what does this even do" into something that just clicks.</p>
         <div class="tags">Pre-sales · Enablement · Clarity</div>
       </article>
       <article class="proj thread">
-        <div class="id"><span>03</span><span>Run</span></div>
+        <div class="id"><span>03</span><span class="verb">Run</span></div>
         <h3>The Operator</h3>
-        <p>Coordinated ops for hundreds of people, ran a company's finances, kept the trains moving. I tend to be the person who finds the calm inside the chaos.</p>
+        <p>Give me a mess and I'll find the structure in it, keep the pieces moving, and make it feel a lot less chaotic than it started.</p>
         <div class="tags">Ops · Org Design · Execution</div>
       </article>
       <article class="proj thread">
-        <div class="id"><span>04</span><span>Learn</span></div>
+        <div class="id"><span>04</span><span class="verb">Learn</span></div>
         <h3>The Perpetual Student</h3>
-        <p>Three clouds, four certs, three languages, one degree in systems — but the real flex is going from zero to dangerous in almost any new domain, fast.</p>
+        <p>Three clouds, four certs, three languages, one systems degree — but the part I actually love is getting from zero to useful in something new, fast.</p>
         <div class="tags">Generalist · Fast Ramp · Curious</div>
       </article>
       <article class="proj thread">
-        <div class="id"><span>05</span><span>Compete</span></div>
+        <div class="id"><span>05</span><span class="verb">Compete</span></div>
         <h3>The Competitor</h3>
         <p>Esports, marathons, boulder problems. I'm wired to chase the next hard thing and — quietly, politely — I really hate losing.</p>
         <div class="tags">Drive · Discipline · Grit</div>
       </article>
       <article class="proj thread">
-        <div class="id"><span>06</span><span>Empower</span></div>
+        <div class="id"><span>06</span><span class="verb">Empower</span></div>
         <h3>The Builder, For Others</h3>
-        <p>Ran WheelPower and built products with Paralympian Jason Chee. The systems I'm proudest of are the ones that hand power to people who didn't have it.</p>
+        <p>The work I care about most is the stuff that actually helps people — accessible by default, with a real human at the center.</p>
         <div class="tags">Impact · Human-centered · Access</div>
       </article>
     </div>
   </section>
 
-  <!-- ================ MOTION ================ -->
+  <!-- ================ MOTION / BEYOND ================ -->
   <section id="motion">
     <div class="sec-head reveal">
-      <span class="num">04</span>
+      <span class="num">05</span>
       <h2>Off The Clock</h2>
       <span class="line"></span>
       <span class="meta">The same brain, unsupervised</span>
@@ -838,11 +902,11 @@
     <div class="beyond-list">
       <div class="beyond reveal">
         <span class="tag">Markets</span>
-        <p><strong>Global macro</strong> — I can't help reading the whole world as one connected machine of flows, rates, and incentives. Investing is just systems thinking with skin in the game.</p>
+        <p><strong>Global macro</strong> — I can't help watching how the world's flows, rates, and incentives connect. Investing is basically the same puzzle, just with skin in the game.</p>
       </div>
       <div class="beyond reveal">
         <span class="tag">Endure</span>
-        <p><strong>Long-distance running</strong> — the long, boring, beautiful proof that consistency compounds. Nobody's watching at kilometre 30; you just keep going.</p>
+        <p><strong>Long-distance running</strong> — a good reminder that just showing up, over and over, actually works. Nobody's watching at km 30; you keep going anyway.</p>
       </div>
       <div class="beyond reveal">
         <span class="tag">Solve</span>
@@ -850,7 +914,7 @@
       </div>
       <div class="beyond reveal">
         <span class="tag">Play</span>
-        <p><strong>Competitive esports</strong> — where my systems brain first learned to think at 200 milliseconds, and where GamerDraft was born.</p>
+        <p><strong>Competitive esports</strong> — where I first learned to think fast under pressure, and where GamerDraft came from.</p>
       </div>
     </div>
   </section>
@@ -858,20 +922,21 @@
   <!-- ================ CONTACT ================ -->
   <footer class="site-footer" id="contact">
     <div class="sec-head reveal">
-      <span class="num">05</span>
+      <span class="num">06</span>
       <h2>Let's Connect</h2>
       <span class="line"></span>
-      <span class="meta">Handshake</span>
+      <span class="meta">Say hi</span>
     </div>
-    <p class="contact-line reveal">If any of this resonated —</p>
+    <p class="contact-line reveal">If any of this clicked, drop me a line —</p>
     <a class="email-link reveal" style="--d:.1s" href="mailto:andrewtaywq3@gmail.com">andrewtaywq3@gmail.com</a>
     <div class="footer-links reveal" style="--d:.2s">
-      <a href="https://www.linkedin.com/in/andrewtay" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      <a href="mailto:andrewtaywq3@gmail.com">Email →</a>
+      <a href="https://www.linkedin.com/in/andrew-tay/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
       <a href="https://andtay.com" target="_blank" rel="noopener noreferrer">andtay.com ↗</a>
     </div>
     <div class="colophon">
       <span>© 2026 Tay Wei Quan Andrew</span>
-      <span>Designed as a living system</span>
+      <span>Built by hand</span>
       <span>Singapore · GMT+8</span>
     </div>
   </footer>
@@ -885,19 +950,25 @@
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ==================================================
-     DOT FIELD — a living grid of nodes and signals
+     HALFTONE FIELD — a grid of dots whose size follows
+     a slow, flowing fingerprint / topographic-ridge
+     field. It reads as an identity scan (KYC/KYB) and a
+     systems contour map at once. The whorl drifts on its
+     own and gently leans toward the cursor, so moving the
+     mouse feels like sweeping a scanner across the print.
+     Pure canvas — no images, no SVG.
      ================================================== */
   var canvas = document.getElementById("field");
   var ctx = canvas.getContext("2d");
 
   var W = 0, H = 0, DPR = 1;
-  var dots = [];          // {x, y, col, row}
-  var cols = 0, rows = 0;
-  var SPACING = 28;
   var mouse = { x: -9999, y: -9999, active: false };
-  var smooth = { x: -9999, y: -9999 };
-  var signals = [];       // travelling pulses along grid lines
-  var t = 0;
+  var tm = 0;                    // slow time accumulator
+  var running = false;
+
+  /* the fingerprint: a bounded oval drawn as concentric ridge LINES */
+  var fpx = 0, fpy = 0, frx = 1, fry = 1, BASEX = 0;
+  var RIDGES = 150;              // ridge density (higher → more, finer ridges)
 
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -909,151 +980,82 @@
     canvas.style.height = H + "px";
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
-    SPACING = W < 700 ? 34 : 28;
-    cols = Math.ceil(W / SPACING) + 1;
-    rows = Math.ceil(H / SPACING) + 1;
-    dots = [];
-    var ox = (W - (cols - 1) * SPACING) / 2;
-    var oy = (H - (rows - 1) * SPACING) / 2;
-    for (var r = 0; r < rows; r++) {
-      for (var c = 0; c < cols; c++) {
-        dots.push({ x: ox + c * SPACING, y: oy + r * SPACING, col: c, row: r });
-      }
-    }
+    /* portrait oval, sized to sit fully on screen; off to one side on wide
+       layouts so the whole fingerprint silhouette stays readable */
+    fry = Math.min(H * 0.40, 460);
+    frx = fry * 0.72;
+    BASEX = (W > 960) ? W * 0.66 : W * 0.5;
+    fpx = BASEX;
+    fpy = H * 0.5;
+
     var hudPos = document.getElementById("hud-pos");
-    if (hudPos) hudPos.textContent = "GRID " + cols + " × " + rows;
+    if (hudPos) hudPos.textContent = "ID · PRINT";
   }
 
-  /* radial falloff from a drifting focal point — like the reference image */
-  function baseAlpha(d, fx, fy) {
-    var dx = d.x - fx, dy = d.y - fy;
-    var dist = Math.sqrt(dx * dx + dy * dy);
-    var maxDist = Math.sqrt(W * W + H * H) * 0.5;
-    var fall = Math.max(0, 1 - dist / maxDist);
-    /* soft shimmer: cheap pseudo-noise */
-    var shimmer = 0.5 + 0.5 * Math.sin(d.col * 0.9 + d.row * 1.3 + t * 0.012);
-    return 0.04 + fall * fall * (0.22 + 0.30 * shimmer);
+  /* fade ridges toward the oval rim (and slightly at the very core) so the
+     print reads as a soft thumbprint silhouette rather than a hard disc */
+  function rim(re) {
+    var m = 1;
+    if (re > 0.70) { var tt = (re - 0.70) / 0.34; if (tt > 1) tt = 1; m = 1 - tt * tt * (3 - 2 * tt); }
+    if (re < 0.14) m *= re / 0.14;
+    return m;
   }
 
-  function spawnSignal() {
-    if (signals.length > 5 || dots.length === 0) return;
-    var horizontal = Math.random() < 0.5;
-    var idx = horizontal
-      ? Math.floor(Math.random() * rows)
-      : Math.floor(Math.random() * cols);
-    signals.push({
-      horizontal: horizontal,
-      idx: idx,
-      pos: Math.random() < 0.5 ? 0 : (horizontal ? W : H),
-      dir: 0,
-      speed: 3 + Math.random() * 4,
-      life: 1
-    });
-    var s = signals[signals.length - 1];
-    s.dir = s.pos === 0 ? 1 : -1;
-  }
+  /* draw the fingerprint as continuous ridge LINES — nested, organically
+     warped rings in an elliptical metric. Each ring is a closed curve at a
+     fixed normalised radius; a domain warp gives the wandering, print-like
+     wobble, and the warp phase is offset per ring so neighbouring ridges
+     drift apart and together like real minutiae. */
+  function drawRidges(animate) {
+    var HALF = Math.PI / 2, TWO_PI = Math.PI * 2;
+    var drift = animate ? tm * 1.2 : 0;        // slow radial breathing
+    var Rc = 160;
+    ctx.lineWidth = 1.15;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
 
-  function drawSignals() {
-    for (var i = signals.length - 1; i >= 0; i--) {
-      var s = signals[i];
-      s.pos += s.speed * s.dir;
-      var out = s.dir > 0 ? s.pos > (s.horizontal ? W : H) + 60 : s.pos < -60;
-      if (out) { signals.splice(i, 1); continue; }
+    var kStart = Math.ceil((0.05 * RIDGES - HALF + drift) / TWO_PI);
+    var kEnd = Math.floor((1.04 * RIDGES - HALF + drift) / TWO_PI);
 
-      var ox = (W - (cols - 1) * SPACING) / 2;
-      var oy = (H - (rows - 1) * SPACING) / 2;
-      var fixed = s.horizontal ? oy + s.idx * SPACING : ox + s.idx * SPACING;
-      var trail = 90;
-
-      var x0 = s.horizontal ? s.pos - trail * s.dir : fixed;
-      var y0 = s.horizontal ? fixed : s.pos - trail * s.dir;
-      var x1 = s.horizontal ? s.pos : fixed;
-      var y1 = s.horizontal ? fixed : s.pos;
-
-      var grad = ctx.createLinearGradient(x0, y0, x1, y1);
-      grad.addColorStop(0, "rgba(255,255,255,0)");
-      grad.addColorStop(1, "rgba(255,255,255,0.35)");
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 1;
+    for (var k = kStart; k <= kEnd; k++) {
+      var re0 = (HALF + TWO_PI * k - drift) / RIDGES;   // this ring's radius
+      var m = rim(re0);
+      if (m <= 0.02) continue;
+      ctx.strokeStyle = "rgba(255,255,255," + (0.20 * m).toFixed(3) + ")";
       ctx.beginPath();
-      ctx.moveTo(x0, y0);
-      ctx.lineTo(x1, y1);
+      var steps = 120;
+      for (var i = 0; i <= steps; i++) {
+        var th = (i / steps) * TWO_PI;
+        var x0 = fpx + re0 * Math.cos(th) * frx;
+        var y0 = fpy + re0 * Math.sin(th) * fry;
+        /* organic warp — the ridges' wandering wobble */
+        var x = x0 + 6 * Math.sin(y0 * 0.020 + tm * 0.6 + k * 0.55);
+        var y = y0 + 6 * Math.cos(x0 * 0.022 - tm * 0.5 + k * 0.55);
+        /* cursor presses the print like a fingertip on glass */
+        if (animate && mouse.active) {
+          var ddx = x - mouse.x, ddy = y - mouse.y;
+          var dl = Math.sqrt(ddx * ddx + ddy * ddy);
+          if (dl < Rc && dl > 0.001) { var pr = 1 - dl / Rc; var push = pr * pr * 8; x += ddx / dl * push; y += ddy / dl * push; }
+        }
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
       ctx.stroke();
-
-      /* bright head */
-      ctx.fillStyle = "rgba(255,255,255,0.9)";
-      ctx.beginPath();
-      ctx.arc(x1, y1, 1.6, 0, Math.PI * 2);
-      ctx.fill();
     }
   }
-
-  var running = false;
 
   function frame() {
     if (document.hidden) { running = false; return; }
-    t++;
+    tm += 0.0042;
     ctx.clearRect(0, 0, W, H);
 
-    /* focal point: drifts in a slow lissajous, leans toward cursor */
-    var driftX = W / 2 + Math.sin(t * 0.003) * W * 0.08;
-    var driftY = H / 2 + Math.cos(t * 0.0023) * H * 0.08;
-    smooth.x += ((mouse.active ? mouse.x : driftX) - smooth.x) * 0.05;
-    smooth.y += ((mouse.active ? mouse.y : driftY) - smooth.y) * 0.05;
-    var fx = driftX * 0.55 + smooth.x * 0.45;
-    var fy = driftY * 0.55 + smooth.y * 0.45;
+    /* the print breathes and leans gently toward the cursor like a scan */
+    var tgx = BASEX + Math.sin(tm * 0.5) * W * 0.010;
+    var tgy = H * 0.5 + Math.cos(tm * 0.45) * H * 0.010;
+    if (mouse.active) { tgx += (mouse.x - BASEX) * 0.05; tgy += (mouse.y - H * 0.5) * 0.05; }
+    fpx += (tgx - fpx) * 0.05;
+    fpy += (tgy - fpy) * 0.05;
 
-    var R = 140;           /* cursor influence radius */
-    var near = [];
-
-    for (var i = 0; i < dots.length; i++) {
-      var d = dots[i];
-      var a = baseAlpha(d, fx, fy);
-      var size = 1;
-
-      if (mouse.active) {
-        var dx = d.x - mouse.x, dy = d.y - mouse.y;
-        var dist2 = dx * dx + dy * dy;
-        if (dist2 < R * R) {
-          var prox = 1 - Math.sqrt(dist2) / R;
-          a = Math.min(1, a + prox * 0.85);
-          size = 1 + prox * 1.6;
-          if (near.length < 90) { d.prox = prox; near.push(d); }
-        }
-      }
-
-      ctx.fillStyle = "rgba(255,255,255," + a.toFixed(3) + ")";
-      ctx.fillRect(d.x - size / 2, d.y - size / 2, size, size);
-    }
-
-    /* constellation: weave a local lattice between neighbouring nodes,
-       so links radiate in every direction rather than from one point */
-    if (mouse.active && near.length > 1) {
-      var linkDist = SPACING * 1.55;   /* reaches orthogonal + diagonal neighbours */
-      for (var j = 0; j < near.length; j++) {
-        var nj = near[j];
-        for (var k = j + 1; k < near.length; k++) {
-          var nk = near[k];
-          var lx = nj.x - nk.x, ly = nj.y - nk.y;
-          var ld2 = lx * lx + ly * ly;
-          if (ld2 > linkDist * linkDist) continue;
-          var closeness = 1 - Math.sqrt(ld2) / linkDist;
-          /* brightest where both endpoints sit near the cursor */
-          var la = closeness * Math.min(nj.prox, nk.prox) * 0.6;
-          if (la < 0.012) continue;
-          ctx.strokeStyle = "rgba(255,255,255," + la.toFixed(3) + ")";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(nj.x, nj.y);
-          ctx.lineTo(nk.x, nk.y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    drawSignals();
-    if (t % 140 === 0 && Math.random() < 0.8) spawnSignal();
-
+    drawRidges(true);
     requestAnimationFrame(frame);
   }
 
@@ -1063,14 +1065,12 @@
     requestAnimationFrame(frame);
   }
 
+  /* reduced-motion: one still frame of the fingerprint */
   function staticFrame() {
+    fpx = BASEX;
+    fpy = H * 0.5;
     ctx.clearRect(0, 0, W, H);
-    for (var i = 0; i < dots.length; i++) {
-      var d = dots[i];
-      var a = baseAlpha(d, W / 2, H / 2);
-      ctx.fillStyle = "rgba(255,255,255," + a.toFixed(3) + ")";
-      ctx.fillRect(d.x - 0.5, d.y - 0.5, 1, 1);
-    }
+    drawRidges(false);
   }
 
   window.addEventListener("resize", function () {
@@ -1081,11 +1081,10 @@
     if (!document.hidden) startLoop();
   });
   window.addEventListener("pointermove", function (e) {
-    if (e.pointerType === "touch") return;
     mouse.x = e.clientX;
     mouse.y = e.clientY;
     mouse.active = true;
-  });
+  }, { passive: true });
   window.addEventListener("pointerleave", function () { mouse.active = false; });
   window.addEventListener("blur", function () { mouse.active = false; });
 
@@ -1097,6 +1096,7 @@
      TEXT SCRAMBLE — hero name decodes on load
      ================================================== */
   function scramble(el, finalText, delay) {
+    if (!el) return;
     if (prefersReduced) { el.textContent = finalText; return; }
     var chars = "█▓▒░<>/\\|=+*·";
     var frameCount = 0;
